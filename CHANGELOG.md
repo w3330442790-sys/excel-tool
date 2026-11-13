@@ -1,3 +1,9 @@
+# 2.2.0 — Independent personal plugin identity (2026-11-13)
+
+- Use excel-tool as the plugin ID, isolated from community TableTune updates.
+- Import legacy configuration only when the personal copy is missing; retain old files, all unknown fields and note content.
+- Canonical BRAT repository: w3330442790-sys/excel-tool.
+
 # 2.1.4 — excel tool (2026-11-07)
 
 - Show the icon toolbar on desktop mouse clicks inside cells in Live Preview and Reading View.

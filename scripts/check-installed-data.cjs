@@ -6,7 +6,7 @@ const api={Plugin:class{async loadData(){return JSON.parse(JSON.stringify(origin
 const modules={'obsidian':api,'@codemirror/state':{StateEffect:{define:()=>({})}},'@codemirror/commands':{invertedEffects:{of:x=>x}},'@codemirror/view':{EditorView:{updateListener:{of:x=>x}}}};
 const moduleFixture={exports:{}},window={addEventListener(){},removeEventListener(){}},document={body:{},addEventListener(){},removeEventListener(){},querySelectorAll:()=>[]};
 vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../main.js'),'utf8'),{module:moduleFixture,require:id=>{if(!modules[id])throw Error(id);return modules[id]},window,document,MutationObserver:class{observe(){}disconnect(){}},console,setTimeout,clearTimeout,Promise});
-(async()=>{const p=new moduleFixture.exports();p.app={workspace:{on:()=>({}),onLayoutReady(){},getActiveFile:()=>null}};await p.onload();await p.persist();
+(async()=>{const p=new moduleFixture.exports();p.manifest={id:'excel-tool'};p.app={vault:{configDir:'.obsidian',adapter:{exists:async()=>false}},workspace:{on:()=>({}),onLayoutReady(){},getActiveFile:()=>null}};await p.onload();await p.persist();
  for(const key of ['widths','rowHeights','merges','tableDims','alignments'])a.deepEqual(JSON.parse(JSON.stringify(saved[key])),original[key]||{});
  for(const key of Object.keys(original))a.deepEqual(JSON.parse(JSON.stringify(saved[key])),original[key]);
  a.equal(hash(fs.readFileSync(file)),hash(raw));

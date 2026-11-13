@@ -15,8 +15,8 @@ const api={
 };
 window.require=id=>id==='obsidian'?api:id==='@codemirror/state'?TestCM.state:id==='@codemirror/view'?TestCM.view:id==='@codemirror/commands'?TestCM.commands:(()=>{throw Error('Unknown module '+id)})();
 window.startFixture=async Plugin=>{
- const p=window.p=new Plugin(),events=new Map();
- p.app={workspace:{getActiveFile:()=>({path:'sample.md'}),on:(name,f)=>{events.set(name,f);return{}},onLayoutReady:f=>callbacks.push(f),getActiveViewOfType:()=>({editor:window.editor,getState:()=>({mode:'preview'}),leaf:{setViewState:async view=>{window.requestedViewState=view.state}}})},vault:{adapter:{exists:async path=>files.has(path)},createFolder:async path=>files.set(path,{folder:true}),create:async(path,text)=>{if(files.has(path))throw Error('exists');files.set(path,text);return{path}}}};
+ const p=window.p=new Plugin(),events=new Map(); p.manifest={id:"excel-tool"};
+ p.app={workspace:{getActiveFile:()=>({path:'sample.md'}),on:(name,f)=>{events.set(name,f);return{}},onLayoutReady:f=>callbacks.push(f),getActiveViewOfType:()=>({editor:window.editor,getState:()=>({mode:'preview'}),leaf:{setViewState:async view=>{window.requestedViewState=view.state}}})},vault:{configDir:".obsidian",adapter:{exists:async path=>files.has(path)},createFolder:async path=>files.set(path,{folder:true}),create:async(path,text)=>{if(files.has(path))throw Error('exists');files.set(path,text);return{path}}}};
  const table=(id,n,m)=>{const t=document.createElement('table');t.id=id;t.dataset.fixtureUid=id==='existing'?'existing':'other';const head=t.createTHead().insertRow();for(let c=0;c<m;c++){const th=document.createElement('th');th.textContent=(c===0?p.encodeInvisibleUid(t.dataset.fixtureUid):'')+['项目名称','对比维度','说明','备注','关联','来源'][c];head.appendChild(th)}
   const body=t.createTBody();for(let r=1;r<n;r++){const row=body.insertRow();for(let c=0;c<m;c++){const cell=row.insertCell();cell.textContent=(r===2&&c===2)?'已有合并内容':(r===2||r===3)&&(c===2||c===3)?'':c===0?'项目 '+r:'第 '+r+' 行 · 第 '+c+' 列'}}
   const host=document.createElement('div');host.className='table-wrapper';host.appendChild(t);document.getElementById('tables').appendChild(host);return t;};

@@ -10,25 +10,15 @@
 w3330442790-sys/excel-tool
 ```
 
-选择最新版本并启用“excel tool”。如果 BRAT 仍跟踪 `w3330442790-sys/obsidian-table-tune` 或上游 `niixyz64-star/table-tune`，在 BRAT 的列表里更换为上述更新来源，保留 Obsidian 社区插件和原 `table-tune` 目录。如果 BRAT 提示插件已存在，选择原位更新。重新启用插件或重启 Obsidian 后加载新版。
+选择最新版本并启用“excel tool”。从 2.2.0 起插件 ID 为 `excel-tool`，与社区 `table-tune` 完全独立。
 
-Release 包含 BRAT 必需的独立 `main.js`、`manifest.json`、`styles.css` 附件，以及备用手动安装 ZIP；不含 data.json。
+旧用户先停用原 TableTune / excel tool，再在 BRAT 移除上游更新跟踪并添加本仓库。旧个人仓库 `w3330442790-sys/obsidian-table-tune` 请更换为上面的规范地址。不要卸载或删除旧插件数据。
 
-## 原插件替换与已有表格
+首次启用会在新目录没有 data.json 时，复制旧 `.obsidian/plugins/table-tune/data.json`，保留列宽、行高、合并、底色、固定和未知字段；不会改写旧文件或笔记。若已卸载且删除旧设置，本插件不能凭空恢复已删除的布局，但 Markdown 表格正文不依赖这些设置。
 
-插件 ID 仍是 `table-tune`，直接沿用原插件 `data.json`。不是安装第二份插件，也不会批量转换 Markdown 表格。首次启用不改写笔记源码；固定、底色、标记均默认关闭。已有列宽、行高、合并和对齐继续读取原数据。
+最低 Obsidian 版本 1.14.4，支持安卓和平板。社区搜索中的 TableTune 是原版；本个人增强版请用 BRAT 仓库地址安装。
 
-最低 Obsidian 版本：1.14.4。更新仅替换以下三个文件：
-
-```text
-<笔记库>/.obsidian/plugins/table-tune/main.js
-<笔记库>/.obsidian/plugins/table-tune/manifest.json
-<笔记库>/.obsidian/plugins/table-tune/styles.css
-```
-
-**保留原目录和 data.json，不要删除整个插件文件夹，不要卸载后重装。** 安装包不含 data.json。安装前关闭插件或退出 Obsidian，将原来的三个程序文件和 data.json 复制到备份文件夹，再复制新程序文件覆盖，重新启用插件或重启 Obsidian。
-
-手动安装时，解压 `excel-tool-2.1.4.zip`，把其中 `table-tune` 文件夹内的三个程序文件复制到现有插件目录。电脑与平板的插件程序需要分别更新，是否同步 `.obsidian` 及插件配置取决于你的同步工具。
+Release 提供独立 main.js、manifest.json、styles.css 和备用 ZIP。手动安装将三个程序文件放入 `.obsidian/plugins/excel-tool/`，保留已有 data.json；旧 `table-tune` 目录可保留作备份。电脑和平板需要分别更新，普通笔记同步不保证同步插件程序。
 
 ## 操作
 
@@ -67,4 +57,4 @@ npm run build
 npm run test:ui
 ```
 
-UI 测试默认使用本机 Edge，可用 BROWSER_PATH 指定 Chromium。构建输出在 dist/table-tune。测试只使用隔离样例，不读取真实笔记；独立的 check-installed-data 脚本只有显式传入数据文件时才进行只读兼容检查。
+UI 测试默认使用本机 Edge，可用 BROWSER_PATH 指定 Chromium。构建输出在 dist/excel-tool。测试只使用隔离样例，不读取真实笔记；独立的 check-installed-data 脚本只有显式传入数据文件时才进行只读兼容检查。

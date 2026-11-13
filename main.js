@@ -3328,12 +3328,35 @@ function renderIcon(element,name){
 module.exports={renderIcon,PATHS};
 
 },
+"./legacy.cjs":function(module,exports,require){
+'use strict';
+
+// Copy only missing configuration files. Never change the legacy files or notes.
+async function migrateLegacyData(app, currentId, legacyId, names) {
+ const adapter=app.vault.adapter;
+ const root=app.vault.configDir+'/plugins/';
+ const pending=[];
+ for(const name of names){
+  const target=root+currentId+'/'+name,source=root+legacyId+'/'+name;
+  if(await adapter.exists(target)||!await adapter.exists(source))continue;
+  const text=await adapter.read(source),value=JSON.parse(text);
+  if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('Invalid legacy settings: '+source);
+  pending.push({target,text});
+ }
+ for(const {target,text} of pending){
+  if(!await adapter.exists(target))await adapter.write(target,text);
+ }
+}
+module.exports={migrateLegacyData};
+
+},
 "./plugin.cjs":function(module,exports,require){
 'use strict';
 const Base=require('./base.cjs');
 const {Notice,Menu,MarkdownView}=require('obsidian');
 const {renderIcon}=require('./icons.cjs');
 const core=require('./core.cjs');
+const {migrateLegacyData}=require('./legacy.cjs');
 const clone=x=>JSON.parse(JSON.stringify(x));
 const TOOL_ICONS={
  '选择区域':'scan','完成选择':'check','选择行列':'table-properties','合并单元格':'combine','拆分单元格':'split',
@@ -3344,6 +3367,7 @@ const TOOL_ICONS={
 
 module.exports=class TabletTableTools extends Base{
  async onload(){
+  await migrateLegacyData(this.app,this.manifest.id,'table-tune',['data.json']);
   this._savedData=(await this.loadData())||{};
   this.cellStyles=this._savedData.cellStyles||{};this.tableOptions=this._savedData.tableOptions||{};
   this._ttCleanups=new Map();this._ttLoaded=true;

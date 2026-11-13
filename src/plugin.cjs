@@ -3,6 +3,7 @@ const Base=require('./base.cjs');
 const {Notice,Menu,MarkdownView}=require('obsidian');
 const {renderIcon}=require('./icons.cjs');
 const core=require('./core.cjs');
+const {migrateLegacyData}=require('./legacy.cjs');
 const clone=x=>JSON.parse(JSON.stringify(x));
 const TOOL_ICONS={
  '选择区域':'scan','完成选择':'check','选择行列':'table-properties','合并单元格':'combine','拆分单元格':'split',
@@ -13,6 +14,7 @@ const TOOL_ICONS={
 
 module.exports=class TabletTableTools extends Base{
  async onload(){
+  await migrateLegacyData(this.app,this.manifest.id,'table-tune',['data.json']);
   this._savedData=(await this.loadData())||{};
   this.cellStyles=this._savedData.cellStyles||{};this.tableOptions=this._savedData.tableOptions||{};
   this._ttCleanups=new Map();this._ttLoaded=true;

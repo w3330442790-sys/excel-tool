@@ -3,8 +3,8 @@ $ErrorActionPreference='Stop'
 $projectRoot=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $targetRoot=(Resolve-Path -LiteralPath $PluginDir).Path
 $installed=Get-Content -LiteralPath (Join-Path $targetRoot 'manifest.json') -Raw | ConvertFrom-Json
-$built=Get-Content -LiteralPath (Join-Path $projectRoot 'dist\table-tune\manifest.json') -Raw | ConvertFrom-Json
-if ($installed.id -ne 'table-tune' -or $built.id -ne 'table-tune') { throw 'Unexpected plugin ID; replacement cancelled.' }
+$built=Get-Content -LiteralPath (Join-Path $projectRoot 'dist\excel-tool\manifest.json') -Raw | ConvertFrom-Json
+if ($installed.id -ne 'excel-tool' -or $built.id -ne 'excel-tool' -or (Split-Path -Leaf $targetRoot) -ne 'excel-tool') { throw 'Target must be the independent excel-tool installation. Install via BRAT first; keep the old table-tune data for migration.' }
 if ([version]$installed.version -ge [version]$built.version) { throw 'Built version must be newer than installed version; replacement cancelled.' }
 $programFiles=@('main.js','styles.css','manifest.json')
 $dataPath=Join-Path $targetRoot 'data.json'
@@ -15,7 +15,7 @@ foreach($name in ($programFiles+@('data.json'))){$source=Join-Path $targetRoot $
 $report=@{oldVersion=$installed.version;newVersion=$built.version;target=$targetRoot;backup=$backupRoot;programFiles=@();dataUnchanged=$false}
 try{
  foreach($name in $programFiles){
-  $source=Join-Path $projectRoot ('dist\table-tune\'+$name)
+  $source=Join-Path $projectRoot ('dist\excel-tool\'+$name)
   $pending=Join-Path $targetRoot ($name+'.table-tools-pending')
   Copy-Item -LiteralPath $source -Destination $pending -Force
   Move-Item -LiteralPath $pending -Destination (Join-Path $targetRoot $name) -Force
